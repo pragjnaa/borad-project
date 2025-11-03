@@ -1,7 +1,7 @@
 variable "ssh_key_name" {
   description = "The name of the SSH key pair to use for instances"
   type        = string
-  default     = "nvg"
+  default     = "k8"
 }
 variable "aws_vpc_name" {
   description = "The name of the VPC"
