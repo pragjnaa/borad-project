@@ -19,7 +19,7 @@ pipeline {
 
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/tirucloud/boardgame.git'
+                git branch: 'main', url: 'https://github.com/pragjnaa/borad-project.git'
             }
         }
         stage("Maven build")
@@ -43,7 +43,7 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-cred'
                 }
             }
         }
@@ -58,14 +58,14 @@ pipeline {
             steps {
                 script {
                     sh 'docker build -t boardgame .'
-                    sh 'docker tag boardgame tirucloud/boardgame:latest'
+                    sh 'docker tag boardgame pragjna/boardgame:latest'
                 }
             }
         }
 
         stage('Trivy Image Scan') {
             steps {
-                sh 'trivy image tirucloud/boardgame:latest > trivyimage.txt'
+                sh 'trivy image pragjna/boardgame:latest > trivyimage.txt'
             }
         }
 
@@ -73,7 +73,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh 'docker push tirucloud/boardgame:latest'
+                        sh 'docker push pragjna/boardgame:latest'
                     }
                 }
             }
@@ -83,7 +83,7 @@ pipeline {
             steps {
                 sh '''
                 docker rm -f boardgame || true
-                docker run -d --name boardgame -p 8081:8080 tirucloud/boardgame:latest
+                docker run -d --name boardgame -p 8081:8080 pragjna/boardgame:latest
                 '''
             }
         }
@@ -118,7 +118,7 @@ pipeline {
                     <b>Build Number:</b> ${env.BUILD_NUMBER}<br/>
                     <b>URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a><br/>
                 """,
-                to: 'tirucloud@gmail.com',
+                to: 'pragjnaa@gmail.com',
                 attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
             )
         }
