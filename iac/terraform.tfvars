@@ -1,5 +1,5 @@
 ami            = "ami-0360c520857e3138f"
 instance_type  = "t2.large"
-key_name       = "nvg"
+key_name       = "k8"
 security_group = "Project-SG"
 region         = "us-east-1"
